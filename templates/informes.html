@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Informes
+{% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+
+    
+
+<h2>Asignaciones por trabajador</h2>
+<form method="GET" action="/informes">
+
+    <label>Trabajador</label>
+
+    <select name="trabajador">
+
+        <option value="">Todos</option>
+
+        {% for trabajador in trabajadores %}
+
+        <option
+            value="{{ trabajador.id_trabajador }}"
+            {% if trabajador_seleccionado|string == trabajador.id_trabajador|string %}
+                selected
+            {% endif %}
+        >
+            {{ trabajador.nombre }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+
+    <label>Tipo</label>
+
+    <select name="tipo">
+
+        <option value="">Todos</option>
+
+        {% for tipo in tipos %}
+
+        <option
+            value="{{ tipo.tipo }}"
+            {% if tipo_seleccionado == tipo.tipo %}
+                selected
+            {% endif %}
+        >
+            {{ tipo.tipo }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+
+    <button type="submit">
+        Buscar
+    </button>
+
+    <a href="/informes">
+        Limpiar filtros
+    </a>
+
+</form>
+
+<table>
+
+    <tr>
+        <th>Trabajador</th>
+        <th>Producto</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Entrega</th>
+        <th>Devolución</th>
+    </tr>
+
+    {% for fila in informe_trabajador %}
+
+    <tr>
+        <td>{{ fila.trabajador }}</td>
+        <td>{{ fila.producto }}</td>
+        <td>{{ fila.tipo }}</td>
+        <td>{{ fila.cantidad }} {{ fila.unidad }}</td>
+        <td>{{ fila.fecha_entrega }}</td>
+        <td>{{ fila.fecha_devolucion or "Pendiente" }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</div>
+
+
+<div class="card">
+
+<h2>Entradas por tipo</h2>
+
+<table>
+
+    <tr>
+        <th>Tipo</th>
+        <th>Producto</th>
+        <th>Total ingresado</th>
+    </tr>
+
+    {% for fila in informe_tipo %}
+
+    <tr>
+        <td>{{ fila.tipo }}</td>
+        <td>{{ fila.producto }}</td>
+        <td>
+            {{ fila.total_ingresado }}
+            {{ fila.unidad }}
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</div>
+
+
+<div class="card">
+
+<h2>Stock actual</h2>
+
+<table>
+
+    <tr>
+        <th>Producto</th>
+        <th>Tipo</th>
+        <th>Entradas</th>
+        <th>Asignado</th>
+        <th>Merma</th>
+        <th>Stock</th>
+        <th>Unidad</th>
+    </tr>
+
+    {% for fila in stock %}
+
+    <tr>
+
+        <td>{{ fila.producto }}</td>
+        <td>{{ fila.tipo }}</td>
+        <td>{{ fila.total_entrada }}</td>
+        <td>{{ fila.total_asignado }}</td>
+        <td>{{ fila.total_merma }}</td>
+
+        <td>
+            <strong>
+                {{ fila.stock_actual }}
+            </strong>
+        </td>
+
+        <td>{{ fila.unidad }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block titulo %}Gestión de Bodega{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        Sistema de Gestión de Bodega
+    </div>
+
+    <nav>
+    <a href="/" class="{% if request.path == '/' %}active{% endif %}">
+        Inicio
+    </a>
+
+    <a href="/productos" class="{% if request.path == '/productos' %}active{% endif %}">
+        📦 Productos
+    </a>
+
+    <a href="/entradas" class="{% if request.path == '/entradas' %}active{% endif %}">
+        ➕ Entradas
+    </a>
+
+    <a href="/asignaciones" class="{% if request.path == '/asignaciones' %}active{% endif %}">
+        📋 Asignaciones
+    </a>
+
+    <a href="/proveedores" class="{% if request.path == '/proveedores' %}active{% endif %}">
+        🚚 Proveedores
+    </a>
+
+    <a href="/trabajadores" class="{% if request.path == '/trabajadores' %}active{% endif %}">
+        👷 Trabajadores
+    </a>
+    <a href="/mermas" class="{% if request.path == '/mermas' %}active{% endif %}"> Mermas
+	</a>
+</nav>
+</header>
+
+<div class="contenedor">
+
+    {% block contenido %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>

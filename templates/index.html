@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Inicio
+{% endblock %}
+
+{% block contenido %}
+
+<h2>Panel de Control</h2>
+
+<div class="dashboard">
+
+    <div class="dashboard-card">
+        <h3>Productos</h3>
+        <p class="numero">{{ total_productos }}</p>
+        <span>Productos registrados</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Trabajadores</h3>
+        <p class="numero">{{ total_trabajadores }}</p>
+        <span>Trabajadores activos</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Entradas</h3>
+        <p class="numero">{{ total_entradas }}</p>
+        <span>Registros de entrada</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Asignaciones</h3>
+        <p class="numero">{{ asignaciones_activas }}</p>
+        <span>Asignaciones activas</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Mermas</h3>
+        <p class="numero">{{ total_mermas }}</p>
+        <span>Registro de merma</span>
+    </div>
+
+</div>
+
+
+<div class="card">
+    <h3>Últimas entradas</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for entrada in ultimas_entradas %}
+            <tr>
+                <td>{{ entrada.fecha }}</td>
+                <td>{{ entrada.producto }}</td>
+                <td>{{ entrada.cantidad }} {{ entrada.unidad }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<div class="card">
+    <h3>Últimas asignaciones</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Trabajador</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for asignacion in ultimas_asignaciones %}
+            <tr>
+                <td>{{ asignacion.trabajador }}</td>
+                <td>{{ asignacion.producto }}</td>
+                <td>{{ asignacion.cantidad }} {{ asignacion.unidad }}</td>
+                <td>{{ asignacion.fecha_entrega }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

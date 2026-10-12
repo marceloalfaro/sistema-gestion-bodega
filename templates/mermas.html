@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Mermas
+{% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+
+<h2>Registrar merma</h2>
+
+<form method="POST">
+
+    <div class="campo">
+
+        <label>Producto</label>
+
+        <select name="id_producto" required>
+
+            <option value="">
+                Seleccione producto
+            </option>
+
+            {% for producto in productos %}
+
+            <option value="{{ producto.id_producto }}">
+                {{ producto.nombre }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+
+    <div class="campo">
+
+        <label>Cantidad</label>
+
+        <input
+            type="number"
+            name="cantidad"
+            step="0.01"
+            min="0.01"
+            required
+        >
+
+    </div>
+
+
+    <div class="campo">
+
+        <label>Motivo</label>
+
+<select name="motivo" required>
+
+    <option value="">
+        Seleccione motivo
+    </option>
+
+    <option value="Daño">Daño</option>
+    <option value="Pérdida">Pérdida</option>
+    <option value="Vencimiento">Vencimiento</option>
+    <option value="Uso interno">Uso interno</option>
+    <option value="Otro">Otro</option>
+
+</select>
+
+    </div>
+
+
+    <div class="campo">
+
+        <label>Fecha</label>
+
+        <input
+            type="date"
+            name="fecha"
+            required
+        >
+
+    </div>
+
+
+    <div class="campo">
+
+        <label>Observación</label>
+
+        <textarea
+        name="observacion"
+        rows="3"
+        ></textarea>
+
+    </div>
+
+    <button type="submit">
+        Registrar merma
+    </button>
+
+</form>
+
+</div>
+
+
+<div class="card">
+
+<h2>Mermas registradas</h2>
+
+<table>
+
+    <tr>
+        <th>ID</th>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Motivo</th>
+        <th>Fecha</th>
+        <th>Observación</th>
+    </tr>
+
+    {% for merma in mermas %}
+
+    <tr>
+
+        <td>{{ merma.id_merma }}</td>
+
+        <td>{{ merma.producto }}</td>
+
+        <td>
+            {{ merma.cantidad }}
+            {{ merma.unidad }}
+        </td>
+
+        <td>{{ merma.motivo }}</td>
+
+        <td>{{ merma.fecha }}</td>
+
+        <td>{{ merma.observacion }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</div>
+{% if error %}
+
+<div class="modal-overlay" id="modalError">
+
+    <div class="modal-error">
+
+        <div class="modal-icon">!</div>
+
+        <h2>No se pudo registrar</h2>
+
+        <p>{{ error }}</p>
+
+        <button type="button" onclick="cerrarModal()">
+            Aceptar
+        </button>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<script>
+function cerrarModal() {
+    document.getElementById("modalError").style.display = "none";
+}
+</script>
+
+{% endblock %}

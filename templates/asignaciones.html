@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Asignaciones
+{% endblock %}
+
+{% block contenido %}
+
+{% if error == "stock" %}
+<div class="alerta-stock">
+    <strong>⚠️ Stock insuficiente</strong>
+
+    <p>
+        No es posible realizar la asignación porque
+        no existe suficiente stock disponible.
+    </p>
+
+    <p>
+        Disponible: {{ disponible }} |
+        Solicitado: {{ solicitado }}
+    </p>
+</div>
+{% endif %}
+
+<div class="card">
+
+    <h2>Nueva asignación</h2>
+
+    <form method="POST">
+
+        <div class="campo">
+            <label>Trabajador</label>
+
+            <select name="id_trabajador" required>
+                <option value="">
+                    Seleccione trabajador
+                </option>
+
+                {% for trabajador in trabajadores %}
+                <option value="{{ trabajador.id_trabajador }}">
+                    {{ trabajador.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+       <div class="campo">
+    <label>Herramienta</label>
+
+    <select name="id_herramienta" id="id_herramienta">
+        <option value="">Seleccione herramienta</option>
+
+        {% for producto in productos %}
+            {% if producto.categoria_uso == "Herramienta" %}
+                <option value="{{ producto.id_producto }}">
+                    {{ producto.nombre }}
+                </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>
+
+
+<div class="campo">
+    <label>Material</label>
+
+    <select name="id_material" id="id_material">
+        <option value="">Seleccione material</option>
+
+        {% for producto in productos %}
+            {% if producto.categoria_uso == "Material" %}
+                <option value="{{ producto.id_producto }}">
+                    {{ producto.nombre }}
+                </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>
+
+
+        <div class="campo">
+            <label>Cantidad</label>
+
+            <input
+                type="number"
+                name="cantidad"
+                step="0.01"
+                min="0.01"
+                required
+            >
+        </div>
+
+
+        <div class="campo">
+            <label>Fecha entrega</label>
+
+            <input
+                type="date"
+                name="fecha_entrega"
+                required
+            >
+        </div>
+
+        <button type="submit">
+            Registrar asignación
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Asignaciones registradas</h2>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>id_trabajador</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Entrega</th>
+            <th>Devolución</th>
+            <th>Estado</th>
+            <th>Acción</th>
+            <th>Eliminar</th>
+        </tr>
+
+        {% for asignacion in asignaciones %}
+
+<tr>
+
+    <td>{{ asignacion.id_asignacion }}</td>
+
+    <td>{{ asignacion.id_trabajador }}</td>
+
+
+    <td>{{ asignacion.producto }}</td>
+
+    <td>
+        {{ asignacion.cantidad }}
+        {{ asignacion.unidad }}
+    </td>
+
+    <td>
+        {{ asignacion.fecha_entrega }}
+    </td>
+
+
+    <!-- devolucion -->
+    <td>
+        {% if asignacion.categoria_uso == "Material" %}
+
+            Material
+
+        {% elif asignacion.fecha_devolucion %}
+
+            {{ asignacion.fecha_devolucion }}
+
+        {% else %}
+
+            -
+
+        {% endif %}
+    </td>
+
+
+    <!-- estado de asignacion-->
+    <td>
+
+        {% if asignacion.categoria_uso == "Material" %}
+
+            <span class="estado-consumido">
+                Consumido
+            </span>
+
+        {% elif asignacion.estado == "Pendiente" %}
+
+            <span class="estado-pendiente">
+                Pendiente
+            </span>
+
+        {% elif asignacion.estado == "Devuelto" %}
+
+            <span class="estado-devuelto">
+                Devuelto
+            </span>
+
+        {% elif asignacion.estado == "Dañado" %}
+
+            <span class="estado-danado">
+                Dañado
+            </span>
+
+        {% elif asignacion.estado == "Perdido" %}
+
+            <span class="estado-danado">
+                Perdido
+            </span>
+
+        {% else %}
+
+            {{ asignacion.estado }}
+
+        {% endif %}
+
+    </td>
+
+
+    
+    <td>
+
+        {% if asignacion.categoria_uso == "Material" %}
+
+            Finalizado
+
+        {% elif asignacion.estado == "Pendiente" %}
+
+            <form
+                method="POST"
+                action="/asignaciones/{{ asignacion.id_asignacion }}/cerrar"
+            >
+
+                <select name="estado" required>
+                    <option value="Devuelto">Devuelto</option>
+                    <option value="Dañado">Dañado</option>
+                    <option value="Perdido">Perdido</option>
+                </select>
+
+                <input
+                    type="date"
+                    name="fecha_devolucion"
+                    required
+                >
+
+                <button type="submit">
+                    Registrar
+                </button>
+
+            </form>
+
+        {% else %}
+
+            Finalizada
+
+        {% endif %}
+
+    </td>
+
+
+    <!-- funcion eliminar -->
+    <td>
+
+        <button
+            type="button"
+            class="btn-eliminar"
+            data-id="{{ asignacion.id_asignacion }}"
+            onclick="abrirModal(this.dataset.id)"
+        >
+            ✖
+        </button>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+    </table>
+
+</div>
+
+
+<!-- para eliminar -->
+
+<div id="modalEliminar" class="modal-overlay" style="display: none;">
+
+    <div class="modal-box">
+
+        <h3>Eliminar asignación</h3>
+
+        <p>
+            ¿Estás seguro de que quieres eliminar esta asignación?
+        </p>
+
+        <div class="modal-botones">
+
+            <button
+                type="button"
+                class="btn-cancelar"
+                onclick="cerrarModal()"
+            >
+                No
+            </button>
+
+            <form
+                id="formEliminar"
+                method="POST"
+            >
+
+                <button
+                    type="submit"
+                    class="btn-confirmar"
+                >
+                    Sí, eliminar
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function abrirModal(idAsignacion) {
+
+    const modal = document.getElementById("modalEliminar");
+    const form = document.getElementById("formEliminar");
+
+    form.action =
+        "/asignaciones/" + idAsignacion + "/eliminar";
+
+    modal.style.display = "flex";
+}
+
+
+function cerrarModal() {
+
+    document.getElementById("modalEliminar").style.display = "none";
+
+}
+const herramienta = document.getElementById("id_herramienta");
+const material = document.getElementById("id_material");
+
+herramienta.addEventListener("change", function () {
+    if (this.value !== "") {
+        material.value = "";
+        material.disabled = true;
+    } else {
+        material.disabled = false;
+    }
+});
+
+material.addEventListener("change", function () {
+    if (this.value !== "") {
+        herramienta.value = "";
+        herramienta.disabled = true;
+    } else {
+        herramienta.disabled = false;
+    }
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Productos
+{% endblock %}
+
+{% block contenido %}
+
+
+
+
+<div class="card">
+
+    <h2>Productos registrados</h2>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Unidad</th>
+            <th>Stock actual</th>
+            <th>Estado</th>
+        </tr>
+
+        {% for producto in productos %}
+
+        <tr>
+
+            <td>
+                {{ producto.id_producto }}
+            </td>
+
+            <td>
+                {{ producto.nombre }}
+            </td>
+
+            <td>
+                {{ producto.tipo }}
+            </td>
+
+            <td>
+                {{ producto.unidad }}
+            </td>
+
+            <td>
+    {{ producto.stock }}
+    {{ producto.unidad }}
+</td>
+
+
+<td>
+   {% if producto.stock <= 0 %}
+    <span class="sin-stock">Sin stock</span>
+
+    {% else %}
+    <span class="disponible">Disponible</span>
+    {% endif %}
+</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

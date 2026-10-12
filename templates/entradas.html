@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Entradas
+{% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+
+    <h2>Registrar entrada</h2>
+
+    <form method="POST">
+
+        <div class="campo">
+
+            <label>Fecha</label>
+
+            <input
+                type="date"
+                name="fecha"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>Proveedor</label>
+
+            <select name="id_proveedor" required>
+
+                <option value="">
+                    Seleccione proveedor
+                </option>
+
+                {% for proveedor in proveedores %}
+
+                <option value="{{ proveedor.id_proveedor }}">
+                    {{ proveedor.nombre }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>Producto</label>
+
+            <select name="id_producto" required>
+
+                <option value="">
+                    Seleccione producto
+                </option>
+
+                {% for producto in productos %}
+
+                <option value="{{ producto.id_producto }}">
+                {{ producto.nombre }} - {{ producto.unidad }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>N° documento</label>
+
+            <input
+                type="text"
+                name="ndocumento"
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>Cantidad</label>
+
+            <input
+                type="number"
+                name="cantidad"
+                step="0.01"
+                min="0.01"
+                required
+            >
+
+        </div>
+
+        <button type="submit">
+            Registrar entrada
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Entradas registradas</h2>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Proveedor</th>
+            <th>Producto</th>
+            <th>Documento</th>
+            <th>Cantidad</th>
+            <th>Unidad</th>
+        </tr>
+
+        {% for entrada in entradas %}
+
+        <tr>
+            <td>{{ entrada.id_entrada }}</td>
+            <td>{{ entrada.fecha }}</td>
+            <td>{{ entrada.proveedor }}</td>
+            <td>{{ entrada.producto }}</td>
+            <td>{{ entrada.ndocumento }}</td>
+            <td>{{ entrada.cantidad }}</td>
+            <td>{{ entrada.unidad }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

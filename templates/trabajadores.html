@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Trabajadores
+{% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+
+    <h2>Agregar trabajador</h2>
+
+    <form method="POST">
+
+        <div class="campo">
+
+            <label>Nombre</label>
+
+            <input
+                type="text"
+                name="nombre"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>Cargo</label>
+
+            <select name="cargo" required>
+
+                <option value="">
+                    Seleccione cargo
+                </option>
+
+                <option value="Supervisor de pista">
+                    Supervisor de pista
+                </option>
+
+                <option value="Ayudante">
+                    Ayudante
+                </option>
+
+                <option value="Maestro primera">
+                    Maestro primera
+                </option>
+
+                <option value="Maestro segunda">
+                    Maestro segunda
+                </option>
+
+                <option value="Maestro senior">
+                    Maestro senior
+                </option>
+
+            </select>
+
+        </div>
+
+        <button type="submit">
+            Agregar trabajador
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Trabajadores registrados</h2>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Cargo</th>
+            <th>Activo</th>
+        </tr>
+
+        {% for trabajador in trabajadores %}
+
+        <tr>
+
+            <td>
+                {{ trabajador.id_trabajador }}
+            </td>
+
+            <td>
+                {{ trabajador.nombre }}
+            </td>
+
+            <td>
+                {{ trabajador.cargo }}
+            </td>
+
+            <td>
+
+                {% if trabajador.activo %}
+
+                    Sí
+
+                {% else %}
+
+                    No
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}
